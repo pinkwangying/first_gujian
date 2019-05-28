@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	*{
+		margin: 0px;
+		padding: 0px;
+	}
+	.details{
+		width: 500px;
+		/*height: 1000px;*/
+		margin: 0px auto;
+		background-color: #eee;
+		padding: 10px;
+	}
+	.details > button{
+		width: 100px;
+		height: 30px;
+		margin-bottom: 10px;
+	}
+	.article{
+		background-color: #ddd;
+		border-bottom:1px solid #bbb;
+		margin-bottom: 10px;
+	}
+	.article h3{
+		height: 30px;
+		line-height: 30px;
+		border-bottom: 1px solid #bbb;
+	}
+	.article p{
+		font-size: 14px;
+	}
+	.article button{
+		margin-left: 450px;
+		margin-bottom: 10px;
+	}
+</style>
+</head>
+<body>
+	<!-- 1. 完成排序功能   ---  要求  渲染的json数据里面有用户点击量  点击按钮  根据点击量  分别对页面数据进行 升序 跟降序排列    -->
+
+	<!-- 页面布局
+		标题：
+		内容
+		点赞
+
+		排序：
+			升序按钮
+			降序按钮
+	 -->
+
+	 <div class="details">
+		<button id="sheng">升序</button>
+	 	<button id="jiang">降序</button>
+		<div class="main"></div>
+	 </div>
+	 <!-- 渲染数据 -->
+	 <script type="text/template" id = 'template'>
+		{{each data}}
+			<div class="article">
+				<h3 class="author">{{$value.author}}</h3>
+				<div class="content">
+				<p >{{$value.content}}</p>
+				<button class="spot" onclick = "dian({{$index}})">点赞{{$value.spot}}</button>
+				</div>
+			</div>
+
+
+		{{/each}}
+	 </script>
+	 <script src="js/template-web.js"></script>
+	 <script>
+	 	// 模拟json数据
+	 	var json = [
+	 	{author:"仓央嘉措",content:"我们不是初遇，而是重逢。所以，我们不必害怕别离，也不必担心一撒手就不会相遇。我是佛前一朵莲花，我到人世来，被世人所误。我是凡尘最美的莲花，我不是普度众生的佛，我来寻我今生的情，与她谈一场风花雪月的爱。",spot:12},
+	 	{author:"海子",content:"从明天起，做一个幸福的人。喂马、劈柴，周游世界。从明天起，关心粮食和蔬菜。我有一所房子，面朝大海，春暖花开。从明天起，和每一个亲人通信。告诉他们我的幸福。那幸福的闪电告诉我的。我将告诉每一个人。给每一条河每一座山。取一个温暖的名字。陌生人，我也为你祝福。愿你有一个灿烂的前程。愿你有情人终成眷属。愿你在尘世获得幸福。我只愿面朝大海，春暖花开",spot:15},
+	 	{author:"舒婷",content:"一朵初夏的蔷薇，划过波浪的琴弦，向不可及的水平远航，乌云像癣一样，布满天空的颜面，鸥群，却为她铺开洁白的翅膀，去吧，我愿望的小太阳，如果你沉没了，就睡在大海的胸膛，在水母银色的帐顶，永远有绿色的波涛喧响，让我也漂去吧，让阳光熨贴的风，把我轻轻吹送，顺着温暖的海流，漂向北方",spot:8}
+	 	];
+	 	var main = document.querySelector('.main');
+	 	// 页面渲染
+	 	function render(json){
+	 		var html = template("template",{"data":json});
+	 		// console.log(json)
+	 		main.innerHTML = html
+	 	}
+	 	render(json)
+
+	 	var spot = document.querySelectorAll('.spot');
+	 	var spotLength = spot.length;
+	 	// 点击事件
+	 	function dian(j){
+	 		var spots = json[j].spot;
+	 		json[j].spot = ++spots;
+	 		// console.log(json[j]);
+	 		render(json)
+	 	}
+	 	// 升序排序
+	 	function asce(){
+	 		json.sort(function(a,b){
+	 			return a.spot - b.spot
+	 		});
+	 		return json
+	 	}
+	 	// 降序
+	 	function desce(){
+	 		json.sort(function(a,b){
+	 			return b.spot - a.spot
+	 		});
+	 		return json
+	 	}
+	 	// 点击按钮 根据排序重新渲染页面
+	 	var sheng = document.querySelector("#sheng");
+	 	var jiang = document.querySelector("#jiang");
+	 	sheng.onclick = function(){
+	 		render(asce());
+	 	};
+	 	jiang.onclick = function(){
+	 		render(desce());
+	 	};
+	 </script>
+</body>
+</html>
